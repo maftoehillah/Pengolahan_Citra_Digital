@@ -1,0 +1,87 @@
+ANALISA SOAL NO. 2 - Konvolusi Tiga Kernel Filter
+===================================================
+Mata Kuliah : Pengolahan Citra Digital
+Universitas : Nahdlatul Ulama Sidoarjo
+
+1. PERBANDINGAN HASIL VISUAL DAN NILAI PIKSEL RATA-RATA:
+
+   a) LPF — Low Pass Filter (Kernel: semua 1/9)
+      Kernel: (1/9) * [[1,1,1],[1,1,1],[1,1,1]]
+      
+      Hasil Visual:
+      - Gambar tampak lebih buram/halus (blur effect)
+      - Detail halus dan tepi objek menjadi tidak tajam
+      - Area transisi antar warna menjadi gradual
+      
+      Nilai Piksel Rata-rata:
+      - Hampir sama dengan citra asli karena jumlah elemen kernel = 1
+      (1+1+1+1+1+1+1+1+1)/9 = 1, sehingga brightness terjaga
+      
+      Efek: Merata-rata nilai piksel dengan 8 tetangganya → mengurangi noise
+
+   b) HPF — High Pass Filter (Kernel: tengah=8, tetangga=-1)
+      Kernel: [[-1,-1,-1],[-1,8,-1],[-1,-1,-1]]
+      
+      Hasil Visual:
+      - Hanya tepi/kontur objek yang terlihat jelas
+      - Area yang intensitasnya seragam menjadi hitam (mendekati 0)
+      - Efek deteksi tepi yang kuat
+      
+      Nilai Piksel Rata-rata:
+      - Jauh lebih rendah dari asli karena banyak piksel bernilai 0 (area datar)
+      - Jumlah elemen kernel = 8 + 8*(-1) = 0, artinya area konstan → 0
+      
+      Efek: Menonjolkan perubahan intensitas yang tiba-tiba antar piksel
+
+   c) BPF — Band Pass Filter (Kernel: tengah=5, tetangga=-1)
+      Kernel: [[0,-1,0],[-1,5,-1],[0,-1,0]]
+      
+      Hasil Visual:
+      - Gambar lebih tajam dari asli, tepi terlihat lebih jelas
+      - Detail dan konten asli gambar tetap terlihat (tidak seperti HPF)
+      - Merupakan gabungan antara efek blur dan edge
+      
+      Nilai Piksel Rata-rata:
+      - Lebih tinggi dari HPF namun bisa lebih rendah atau sama dengan asli
+      - Jumlah elemen kernel = 5 + 4*(-1) = 1, sehingga brightness sedikit terjaga
+      
+      Efek: Penajaman gambar (sharpening) sambil mempertahankan konten asli
+
+2. HUBUNGAN DOMAIN SPASIAL DAN DOMAIN FREKUENSI:
+
+   Konsep Dasar:
+   Berdasarkan Teorema Konvolusi Fourier:
+   "Konvolusi di domain spasial setara dengan perkalian di domain frekuensi"
+   
+   Secara matematis: F{f * g} = F{f} × F{g}
+   di mana F{} adalah Transformasi Fourier, * adalah konvolusi
+   
+   a) LPF (Low Pass Filter):
+      - Domain Spasial  : merata-rata piksel, mereduksi variasi lokal
+      - Domain Frekuensi: meloloskan komponen FREKUENSI RENDAH (detail besar)
+                          memblokir komponen frekuensi tinggi (detail halus, noise)
+      - Analogi audio   : filter suara bass, membuang suara berfrekuensi tinggi
+      - Komponen frekuensi rendah = informasi background, bentuk umum objek
+
+   b) HPF (High Pass Filter):
+      - Domain Spasial  : memperkuat perbedaan intensitas antar piksel tetangga
+      - Domain Frekuensi: meloloskan komponen FREKUENSI TINGGI (detail halus)
+                          memblokir komponen frekuensi rendah (background)
+      - Analogi audio   : filter treble, membuang suara berfrekuensi rendah
+      - Komponen frekuensi tinggi = tepi objek, tekstur halus, noise
+
+   c) BPF (Band Pass Filter):
+      - Domain Spasial  : kombinasi efek LPF dan HPF
+      - Domain Frekuensi: meloloskan pita FREKUENSI TERTENTU (menengah)
+                          memblokir frekuensi sangat rendah DAN sangat tinggi
+      - Analogi audio   : equalizer yang hanya mengizinkan pita frekuensi tertentu
+      - Komponen frekuensi menengah = detail objek yang bermakna (bukan noise)
+
+KESIMPULAN:
+   Ketiga filter bekerja dengan prinsip yang sama di domain frekuensi,
+   hanya berbeda pada "pita" frekuensi yang diloloskan:
+   - LPF: loloskan rendah → hasilkan gambar smooth/blur
+   - HPF: loloskan tinggi → hasilkan tepi/edge
+   - BPF: loloskan menengah → hasilkan penajaman yang seimbang
+   
+   Pemilihan filter bergantung pada tujuan pengolahan citra yang diinginkan.

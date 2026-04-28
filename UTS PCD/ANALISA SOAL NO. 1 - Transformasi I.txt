@@ -1,0 +1,54 @@
+ANALISA SOAL NO. 1 - Transformasi Intensitas
+=============================================
+Mata Kuliah : Pengolahan Citra Digital
+Universitas : Nahdlatul Ulama Sidoarjo
+
+1. PERBEDAAN PERSEBARAN NILAI KEABUAN ANTARA KETIGA CITRA:
+
+   a) Citra Asli (F):
+      - Histogram terdistribusi sesuai konten gambar asli
+      - Mencerminkan intensitas piksel tanpa perubahan apapun
+      - Menjadi acuan/referensi untuk perbandingan
+
+   b) Citra Negatif (G = 255 - F):
+      - Histogram merupakan cermin/kebalikan dari histogram asli
+      - Nilai piksel cerah (tinggi) menjadi gelap (rendah), dan sebaliknya
+      - Persebaran statistik tetap sama (mean berubah ke 255 - mean_asli)
+      - Bentuk distribusi histogram sama, hanya posisinya terbalik horizontal
+
+   c) Citra Logaritmik (G = c x log(1+F)):
+      - Histogram bergeser ke kanan (nilai piksel menjadi lebih terang secara umum)
+      - Nilai piksel rendah (area gelap) DIPERLEBAR rentangnya
+      - Nilai piksel tinggi (area terang) DIKOMPRES/dipersempit
+      - Distribusi menjadi tidak simetris — condong ke nilai tinggi
+      - Rata-rata histogram akan lebih tinggi dari citra asli
+
+2. KAPAN TRANSFORMASI LOGARITMIK LEBIH BERMANFAAT DIBANDING NEGATIF?
+
+   Transformasi logaritmik lebih bermanfaat ketika:
+   
+   a) Citra memiliki area yang sangat gelap namun mengandung detail penting
+      yang ingin ditampilkan lebih jelas (contoh: foto dalam kondisi backlight)
+   
+   b) Data citra memiliki rentang dinamis yang sangat lebar (High Dynamic Range)
+      seperti citra medis, citra astronomi, atau hasil transformasi Fourier
+   
+   c) Ingin meningkatkan visibilitas detail pada intensitas rendah tanpa
+      merusak informasi pada area terang
+   
+   d) Contoh aplikasi nyata:
+      - Visualisasi spektrum Fourier (nilai magnitud sangat besar)
+      - Citra medis (MRI, CT Scan) untuk memperjelas jaringan gelap
+      - Citra satelit multispektral
+      - Pengolahan audio (skala desibel menggunakan log)
+
+   Transformasi negatif lebih tepat ketika:
+   - Tujuan hanya membalik citra (seperti foto negatif film analog)
+   - Membantu dokter radiologi melihat detail pada citra X-ray
+   - Menampilkan area putih/terang menjadi gelap agar mudah dianalisis
+
+KESIMPULAN:
+   Transformasi logaritmik memanfaatkan sifat fungsi log yang memperbesar
+   perbedaan nilai kecil dan memperkecil perbedaan nilai besar, sehingga
+   sangat cocok untuk citra dengan distribusi intensitas yang tidak merata
+   atau rentang dinamis yang lebar.
